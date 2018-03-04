@@ -1,11 +1,17 @@
 #pragma once
+#include "Renderable.h"
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
-
+#include "Snake.h"
+#include <vector>
 
 class Game
 {
 public:
+	static const int FRAMES_PER_SECOND = 60;
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 450;
+
 	bool init();
 	void start();
 private:
@@ -26,10 +32,6 @@ private:
 		ShowingMenu, Playing, Exiting
 	};
 
-	static const int FRAMES_PER_SECOND = 60;
-	static const int SCREEN_WIDTH = 1600;
-	static const int SCREEN_HEIGHT = 900;
-
 	sf::Clock renderClock;
 
 	sf::RenderWindow _window;
@@ -37,4 +39,8 @@ private:
 
 	sf::Font font;
 	sf::Text splashText;
+	
+	std::vector<Renderable*> renderables;
+
+	Snake* snake;
 };

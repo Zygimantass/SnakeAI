@@ -1,4 +1,7 @@
 #include "Game.h"
+#include "Renderable.h"
+#include "Snake.h"
+#include "Logging.h"
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -30,7 +33,7 @@ void Game::setup() {
 	splashText.setCharacterSize(100);
 	splashText.setPosition((SCREEN_WIDTH / 2) - (splashText.getGlobalBounds().width / 2), 200);
 
-
+	this->snake = new Snake(&_window);
 }
 
 void Game::start() {
@@ -38,13 +41,13 @@ void Game::start() {
 
 	_gameState = ShowingSplash;
 
-	std::cout << "splash" << std::endl;
+	logger::print("showing splash");
 
 	while (_gameState == ShowingSplash) {
 		splashLoop();
 	}
 
-	std::cout << "gameloop" << std::endl;
+	logger::print("entering game loop");
 
 	while (!isExiting() && _window.isOpen()) {
 		gameLoop();
@@ -60,6 +63,9 @@ bool Game::isExiting() {
 }
 
 void Game::exit() {
+	for (auto& r : renderables)
+		delete r;
+
 	_gameState = Exiting;
 }
 
@@ -97,14 +103,45 @@ void Game::gameLoop() {
 	_window.clear(sf::Color::Black);
 
 	display();
+	update();
 
 	_window.display();
 	
 	renderClock.restart();
 }
 
-void display() {
-	snake.display();
+void Game::display() {
+	this->snake->display();
+
+	for (auto it = renderables.begin(); it != renderables.end(); it++) {
+		Renderable* r = *it;
+		r->display();
+	}
+}
+
+void Game::update() {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		this->snake->switchDirection(sf::Vector2<int>(-1, 0));
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		this->snake->switchDirection(sf::Vector2<int>(1, 0));
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		this->snake->switchDirection(sf::Vector2<int>(0, 1));
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		this->snake->switchDirection(sf::Vector2<int>(0, -1));
+	}
+
+	this->snake->update();
+
+	for (auto it = renderables.begin(); it != renderables.end(); it++) {
+		Renderable* r = *it;
+		r->update();
+	}
 }
 
 void Game::processEvents() {
@@ -116,3 +153,4 @@ void Game::processEvents() {
 		}
 	}
 }
+
