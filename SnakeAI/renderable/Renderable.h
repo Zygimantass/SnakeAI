@@ -7,8 +7,11 @@ public:
 	Renderable(sf::RenderWindow *sf);
 	~Renderable();
 
+	sf::Vector2f getSize();
+	sf::Vector2f getLocation();
+
 	virtual void display();
-	virtual void update();
+	virtual void update(float dt);
 protected:
 	sf::RenderWindow *sf;
 	int width, height = 0;

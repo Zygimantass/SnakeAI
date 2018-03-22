@@ -85,17 +85,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="screen\GameScreen.cpp" />
+    <ClCompile Include="screen\DeathScreen.cpp" />
+    <ClCompile Include="screen\PauseScreen.cpp" />
+    <ClCompile Include="renderable\Food.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Renderable.cpp" />
-    <ClCompile Include="Snake.cpp" />
+    <ClCompile Include="renderable\Renderable.cpp" />
+    <ClCompile Include="renderable\Snake.cpp" />
+    <ClCompile Include="screen\Screen.cpp" />
+    <ClCompile Include="screen\SplashScreen.cpp" />
+    <ClCompile Include="util\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
+    <ClInclude Include="screen\GameScreen.h" />
+    <ClInclude Include="screen\DeathScreen.h" />
+    <ClInclude Include="screen\PauseScreen.h" />
+    <ClInclude Include="screen\Screen.h" />
+    <ClInclude Include="screen\SplashScreen.h" />
+    <ClInclude Include="util\Constants.h" />
+    <ClInclude Include="renderable\Food.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Logging.h" />
-    <ClInclude Include="Renderable.h" />
-    <ClInclude Include="Snake.h" />
+    <ClInclude Include="util\Logging.h" />
+    <ClInclude Include="renderable\Renderable.h" />
+    <ClInclude Include="renderable\Snake.h" />
+    <ClInclude Include="util\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

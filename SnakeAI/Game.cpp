@@ -1,16 +1,34 @@
 #include "Game.h"
-#include "Renderable.h"
-#include "Snake.h"
-#include "Logging.h"
+
 #include <math.h>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <random>
+
+#include "renderable/Renderable.h"
+#include "renderable/Snake.h"
+#include "renderable/Food.h"
+#include "util/Logging.h"
+
+Game* Game::m_pInstance = NULL;
+
+// singleton instance
+
+Game* Game::getInstance() {
+	if (!Game::m_pInstance)
+		Game::m_pInstance = new Game;
+
+	return Game::m_pInstance;
+}
 
 // initialization
 
 bool Game::init() {
 	// init game
+
+	gen.seed(rd());
 
 	sf::Clock renderClock;
 	sf::VideoMode videoMode(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -18,7 +36,7 @@ bool Game::init() {
 	_window.setVerticalSyncEnabled(true);
 	_window.setFramerateLimit(FRAMES_PER_SECOND);
 
-	if (!font.loadFromFile("arial.ttf")) return false;
+	if (!font.loadFromFile("./resources/arial.ttf")) return false;
 
 	setup();
 
@@ -26,31 +44,31 @@ bool Game::init() {
 }
 
 void Game::setup() {
-	splashText.setFont(font);
-	splashText.setString("Snake AI");
-	splashText.setFillColor(sf::Color::Blue);
-	splashText.setPosition(sf::Vector2f(0, 0));
-	splashText.setCharacterSize(100);
-	splashText.setPosition((SCREEN_WIDTH / 2) - (splashText.getGlobalBounds().width / 2), 200);
+	this->splashScreen = new SplashScreen(&this->_window);
+	this->pauseScreen = new PauseScreen(&this->_window);
+	this->deathScreen = new DeathScreen(&this->_window);
+	this->gameScreen = new GameScreen(&this->_window);
 
 	this->snake = new Snake(&_window);
+	foods.push_back(new Food(&_window, 128, 128));
 }
 
 void Game::start() {
 	// game start and loop
 
-	_gameState = ShowingSplash;
-
-	logger::print("showing splash");
-
-	while (_gameState == ShowingSplash) {
-		splashLoop();
-	}
+	switchGameState(ShowingSplash);
 
 	logger::print("entering game loop");
 
 	while (!isExiting() && _window.isOpen()) {
-		gameLoop();
+		if (_gameState == ShowingSplash)
+			splashScreen->loop();
+		if (_gameState == Playing)
+			gameScreen->loop();
+		if (_gameState == Paused)
+			pauseScreen->loop();
+		if (_gameState == GameOver)
+			deathScreen->loop();
 	}
 
 	_window.close();
@@ -63,94 +81,72 @@ bool Game::isExiting() {
 }
 
 void Game::exit() {
-	for (auto& r : renderables)
+	for (auto& r : foods)
 		delete r;
 
 	_gameState = Exiting;
 }
 
-// splash loop
+// snake
 
-void Game::splashLoop() {
-	sf::Event currEvent;
+Snake* Game::getSnake() {
+	return this->snake;
+}
 
-	while (_window.pollEvent(currEvent)) {
-		if (currEvent.type == sf::Event::Closed) {
-			exit();
+// clock
+
+sf::Clock Game::getRenderClock() {
+	return this->renderClock;
+}
+
+// game state mgmt
+
+void Game::switchGameState(GameState state) {
+	switch (state) {
+	case ShowingSplash:
+		
+		break;
+	case GameOver:
+		deathScreen->setScore(snake->getScore());
+		break;
+	}
+
+	_gameState = state;
+}
+
+// misc. functions
+
+int Game::getRandomInt(int min, int max) {
+	std::uniform_int_distribution<int> dist(min, max);
+
+	return dist(gen);
+}
+
+sf::Font Game::getFont() {
+	return this->font;
+}
+
+// food mgmt
+
+void Game::addFood(int cnt) {
+	for (int i = 0; i < cnt; i++) {
+
+		bool foodPosGood = false;
+
+		sf::Vector2f foodLoc;
+
+		while (!foodPosGood) {
+			int maxX = (Game::getInstance()->SCREEN_WIDTH - Food::SIZE) / Food::SIZE;
+			int maxY = (Game::getInstance()->SCREEN_HEIGHT - Food::SIZE) / Food::SIZE;
+
+			int x = getRandomInt(0, maxX);
+			int y = getRandomInt(0, maxY);
+			
+			foodLoc = sf::Vector2f((float) x * 16, (float) y * 16);
+
+			foodPosGood = !snake->collides(foodLoc);
 		}
-	}
-
-	_window.clear(sf::Color::Black);
-
-	if (!(splashText.getFillColor().a > 1)) {
-		_gameState = Playing;
-		return;
-	}
-
-	splashText.setFillColor(sf::Color(255, 255, 255, splashText.getFillColor().a - 2.5));
-
-	_window.draw(splashText);
-
-	_window.display();
-}
-
-// main game loop
-
-void Game::gameLoop() {
-
-	processEvents();
-
-	_window.clear(sf::Color::Black);
-
-	display();
-	update();
-
-	_window.display();
-	
-	renderClock.restart();
-}
-
-void Game::display() {
-	this->snake->display();
-
-	for (auto it = renderables.begin(); it != renderables.end(); it++) {
-		Renderable* r = *it;
-		r->display();
+		
+		foods.push_back(new Food(&_window, (int) foodLoc.x, (int) foodLoc.y));
 	}
 }
-
-void Game::update() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		this->snake->switchDirection(sf::Vector2<int>(-1, 0));
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		this->snake->switchDirection(sf::Vector2<int>(1, 0));
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		this->snake->switchDirection(sf::Vector2<int>(0, 1));
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		this->snake->switchDirection(sf::Vector2<int>(0, -1));
-	}
-
-	this->snake->update();
-
-	for (auto it = renderables.begin(); it != renderables.end(); it++) {
-		Renderable* r = *it;
-		r->update();
-	}
-}
-
-void Game::processEvents() {
-	sf::Event currEvent;
-
-	while (_window.pollEvent(currEvent)) {
-		if (currEvent.type == sf::Event::Closed) {
-			exit();
-		}
-	}
-}
-

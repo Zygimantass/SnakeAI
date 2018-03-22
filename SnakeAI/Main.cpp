@@ -1,12 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h";
-
 int main()
 {
-	Game game;
+	if (!Game::getInstance()->init()) return EXIT_FAILURE;
 
-	if (!game.init()) return EXIT_FAILURE;
-
-	game.start();
+	Game::getInstance()->start();
 	return 0;
 }
