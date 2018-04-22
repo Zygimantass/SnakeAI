@@ -13,7 +13,7 @@ public:
 	UIButton() {
 	}
 	
-	UIButton(sf::RenderWindow *sf, int x, int y, int w, int h, std::string text, int size, std::string font) {
+	UIButton(sf::RenderWindow *sf, int x, int y, int w, int h, std::wstring text, int size, std::string font) {
 		this->sf = sf;
 		this->fontName = font;
 		this->font = std::make_shared<sf::Font>();

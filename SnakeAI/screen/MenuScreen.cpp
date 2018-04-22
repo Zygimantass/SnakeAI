@@ -12,6 +12,8 @@ void MenuScreen::loop() {
 	case PlayerCount:
 		playerCountScreen->loop();
 		break;
+	case About:
+		aboutScreen->loop();
 	}
 }
 

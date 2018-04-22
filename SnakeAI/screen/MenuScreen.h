@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "menu/MainScreen.h"
 #include "menu/PlayerCountScreen.h"
+#include "menu/AboutScreen.h"
 
 class MenuScreen : public Screen
 {
@@ -13,6 +14,7 @@ public:
 
 		this->mainScreen = new MainScreen(this->sf);
 		this->playerCountScreen = new PlayerCountScreen(this->sf);
+		this->aboutScreen = new AboutScreen(this->sf);
 	}
 	~MenuScreen();
 
@@ -20,7 +22,7 @@ public:
 	void loop() override;
 	
 	enum MenuState {
-		Main, PlayerCount
+		Main, PlayerCount, About
 	};
 
 	void switchMenuState(MenuState state);
@@ -31,5 +33,6 @@ private:
 
 	MainScreen *mainScreen;
 	PlayerCountScreen *playerCountScreen;
+	AboutScreen *aboutScreen;
 };
 

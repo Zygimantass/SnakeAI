@@ -9,12 +9,12 @@ GameScreen::~GameScreen()
 void GameScreen::setup() {
 	if (!font.loadFromFile("./resources/arial.ttf")) return;
 
-	scoreOneText.setString("P1 score: ");
+	scoreOneText.setString(L"Ž1 taškai: ");
 	scoreOneText.setFont(font);
 	scoreOneText.setFillColor(sf::Color::White);
 	scoreOneText.setCharacterSize(20);
 
-	scoreTwoText.setString("P2 score: ");
+	scoreTwoText.setString(L"Ž2 taškai: ");
 	scoreTwoText.setFont(font);
 	scoreTwoText.setFillColor(sf::Color::White);
 	scoreTwoText.setCharacterSize(20);
@@ -45,7 +45,7 @@ void GameScreen::loop() {
 
 void GameScreen::displayScore() {
 	scoreOneText.setPosition(7, 7);
-	scoreOneText.setString("P1 score: " + std::to_string(Game::getInstance()->getSnake()->getScore()));
+	scoreOneText.setString(L"Ž1 taškai: " + std::to_wstring(Game::getInstance()->getSnake()->getScore()));
 
 	sf->draw(scoreOneText);
 
@@ -53,7 +53,7 @@ void GameScreen::displayScore() {
 		sf::FloatRect textTwoRect = scoreTwoText.getLocalBounds();
 		scoreTwoText.setPosition(Constants::SCREEN_WIDTH - textTwoRect.width - 7, 7);
 
-		scoreTwoText.setString("P2 score: " + std::to_string(Game::getInstance()->getSecondSnake()->getScore()));
+		scoreTwoText.setString(L"Ž2 taškai: " + std::to_wstring(Game::getInstance()->getSecondSnake()->getScore()));
 		
 		sf->draw(scoreTwoText);
 	}

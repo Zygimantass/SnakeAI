@@ -20,9 +20,11 @@ private:
 
 	void exit();
 	void play();
+	void about();
 
 	UIButton playButton;
 	UIButton exitButton;
+	UIButton aboutButton;
 
 	sf::Font font;
 	sf::Text titleText;
