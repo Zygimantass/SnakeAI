@@ -86,5 +86,6 @@ void TwoPlayerDeathScreen::processEvents() {
 
 void TwoPlayerDeathScreen::reset() {
 	Game::getInstance()->reset();
+	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::Main);
 	Game::getInstance()->switchGameState(Game::ShowingMenu);
 }

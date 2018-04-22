@@ -17,8 +17,13 @@ public:
 private:
 	void display();
 	void update(float dt);
+	void displayScore();
 	
 	sf::Clock renderClock;
 
+	sf::Font font;
+
+	sf::Text scoreOneText;
+	sf::Text scoreTwoText;
 };
 

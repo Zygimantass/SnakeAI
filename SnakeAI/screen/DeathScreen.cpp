@@ -58,5 +58,6 @@ void DeathScreen::processEvents() {
 
 void DeathScreen::reset() {
 	Game::getInstance()->reset();
+	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::Main);
 	Game::getInstance()->switchGameState(Game::ShowingMenu);
 }

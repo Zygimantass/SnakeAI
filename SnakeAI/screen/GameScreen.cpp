@@ -7,6 +7,17 @@ GameScreen::~GameScreen()
 }
 
 void GameScreen::setup() {
+	if (!font.loadFromFile("./resources/arial.ttf")) return;
+
+	scoreOneText.setString("P1 score: ");
+	scoreOneText.setFont(font);
+	scoreOneText.setFillColor(sf::Color::White);
+	scoreOneText.setCharacterSize(20);
+
+	scoreTwoText.setString("P2 score: ");
+	scoreTwoText.setFont(font);
+	scoreTwoText.setFillColor(sf::Color::White);
+	scoreTwoText.setCharacterSize(20);
 }
 
 void GameScreen::loop() {
@@ -32,6 +43,22 @@ void GameScreen::loop() {
 	sf->display();
 }
 
+void GameScreen::displayScore() {
+	scoreOneText.setPosition(7, 7);
+	scoreOneText.setString("P1 score: " + std::to_string(Game::getInstance()->getSnake()->getScore()));
+
+	sf->draw(scoreOneText);
+
+	if (Game::getInstance()->getPlayerCount() == 2) {
+		sf::FloatRect textTwoRect = scoreTwoText.getLocalBounds();
+		scoreTwoText.setPosition(Constants::SCREEN_WIDTH - textTwoRect.width - 7, 7);
+
+		scoreTwoText.setString("P2 score: " + std::to_string(Game::getInstance()->getSecondSnake()->getScore()));
+		
+		sf->draw(scoreTwoText);
+	}
+}
+
 void GameScreen::processEvents() {
 	sf::Event currEvent;
 
@@ -48,6 +75,7 @@ void GameScreen::processEvents() {
 
 void GameScreen::display() {
 	Game::getInstance()->getSnake()->display();
+	displayScore();
 	if (Game::getInstance()->getPlayerCount() == 2) Game::getInstance()->getSecondSnake()->display();
 
 	for (auto it = Game::getInstance()->foods.begin(); it != Game::getInstance()->foods.end(); it++) {
