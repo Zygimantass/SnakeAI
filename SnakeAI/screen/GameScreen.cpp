@@ -10,7 +10,7 @@ void GameScreen::setup() {
 }
 
 void GameScreen::loop() {
-	sf::Time elapsedTime = Game::getInstance()->getRenderClock().restart();
+	sf::Time elapsedTime = renderClock.restart();
 	float dt = elapsedTime.asSeconds();
 	
 	this->processEvents();
@@ -19,14 +19,17 @@ void GameScreen::loop() {
 
 	sf->clear(sf::Color::Black);
 
-	display();
 	update(dt);
+	display();
+
+	if (Game::getInstance()->getPlayerCount() == 2) {
+		if (Game::getInstance()->getSecondSnake()->died() || Game::getInstance()->getSnake()->died()) Game::getInstance()->switchGameState(Game::GameState::TwoPlayerGameOver);
+	}
+	else {
+		if (Game::getInstance()->getSnake()->died()) Game::getInstance()->switchGameState(Game::GameState::GameOver);
+	}
 
 	sf->display();
-
-	if (Game::getInstance()->getSnake()->died()) {
-		Game::getInstance()->switchGameState(Game::GameState::GameOver);
-	}
 }
 
 void GameScreen::processEvents() {
@@ -38,7 +41,6 @@ void GameScreen::processEvents() {
 		}
 
 		if (currEvent.type == sf::Event::KeyReleased && currEvent.key.code == sf::Keyboard::P) {
-			logger::print("entering pause");
 			Game::getInstance()->switchGameState(Game::GameState::Paused);
 		}
 	}
@@ -46,6 +48,7 @@ void GameScreen::processEvents() {
 
 void GameScreen::display() {
 	Game::getInstance()->getSnake()->display();
+	if (Game::getInstance()->getPlayerCount() == 2) Game::getInstance()->getSecondSnake()->display();
 
 	for (auto it = Game::getInstance()->foods.begin(); it != Game::getInstance()->foods.end(); it++) {
 		Renderable* r = *it;
@@ -55,6 +58,8 @@ void GameScreen::display() {
 
 void GameScreen::update(float dt) {
 	Game::getInstance()->getSnake()->update(dt);
+	
+	if (Game::getInstance()->getPlayerCount() == 2) Game::getInstance()->getSecondSnake()->update(dt);
 
 	for (auto it = Game::getInstance()->foods.begin(); it != Game::getInstance()->foods.end(); it++) {
 		Renderable* r = *it;

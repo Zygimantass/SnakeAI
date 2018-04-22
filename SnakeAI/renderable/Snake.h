@@ -2,7 +2,10 @@
 #include "Renderable.h"
 #include "SFML/Graphics.hpp"
 #include <list>
+#include <array>
+#include "../util/Constants.h"
 #include "../util/Utils.h"
+#include "../util/Logging.h"
 #include <sstream>
 
 class Snake: public Renderable
@@ -10,25 +13,45 @@ class Snake: public Renderable
 public:
 	static const int SIZE = 16;
 
-	Snake(sf::RenderWindow *sf) : Renderable(sf) {
+	Snake(sf::RenderWindow *sf, int playerIndex) : Renderable(sf) {
 		this->sf = sf;
 
-		this->bodyColor = sf::Color::Green;
-		this->headColor = sf::Color::Yellow;
+		if (playerIndex == 0) {
+			this->bodyColor = sf::Color::Green;
+			this->headColor = sf::Color::Yellow;
+		} else {
+			this->bodyColor = sf::Color::Red;
+			this->headColor = sf::Color::Blue;
+		}
 
+		
 		this->snake_length = 1;
 
-		this->speed = 6;
+		this->speed = 10;
+
+		int maxX = (Constants::SCREEN_WIDTH - Snake::SIZE) / Snake::SIZE;
+		int maxY = (Constants::SCREEN_HEIGHT - Snake::SIZE) / Snake::SIZE;
+		int gridX = Utils::getRandomInt(0, maxX / 2);
+		int gridY = Utils::getRandomInt(0, maxY / 2);
+
+		logger::printCoords(sf::Vector2i(gridX, gridY));
+		logger::printCoords(sf::Vector2i(gridX * Snake::SIZE, gridY * Snake::SIZE));
+
+		this->x = gridX * Snake::SIZE;
+		this->y = gridY * Snake::SIZE;
+		//this->x = 0;
+		//this->y = 0;
 		
-		this->x = 0;
-		this->y = 0;
 		this->width = Snake::SIZE;
 		this->height = Snake::SIZE;
 
 		this->lastDir = sf::Vector2<int>(0, 1);
 
 		snakeDirections.push_back(sf::Vector2<int>(0, 1));
-		body.push_back(Utils::getRectangleAt(sf::Vector2f(0, 0), sf::Vector2f(16, 16), this->headColor));
+		body.push_back(Utils::getRectangleAt(sf::Vector2f((float) this->x, (float) this->y), sf::Vector2f(16, 16), this->headColor));
+		
+		this->playerIndex = playerIndex;
+		this->currentScheme = this->controlSchemes[playerIndex];
 	};
 
 	~Snake();
@@ -79,4 +102,12 @@ private:
 
 	bool needToUpdateLength = false;
 	bool local = true;
+
+	int playerIndex;
+	std::array<sf::Keyboard::Key, 4> currentScheme;
+
+	std::array<std::array<sf::Keyboard::Key, 4>, 2> controlSchemes = {{
+		{ sf::Keyboard::Left, sf::Keyboard::Right, sf::Keyboard::Up, sf::Keyboard::Down },
+		{ sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W, sf::Keyboard::S }
+	}};
 };

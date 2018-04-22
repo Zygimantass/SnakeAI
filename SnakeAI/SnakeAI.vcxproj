@@ -85,6 +85,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="screen\menu\PlayerCountScreen.cpp" />
+    <ClCompile Include="screen\menu\MainScreen.cpp" />
+    <ClCompile Include="screen\MenuScreen.cpp" />
     <ClCompile Include="screen\GameScreen.cpp" />
     <ClCompile Include="screen\DeathScreen.cpp" />
     <ClCompile Include="screen\PauseScreen.cpp" />
@@ -95,14 +98,21 @@
     <ClCompile Include="renderable\Snake.cpp" />
     <ClCompile Include="screen\Screen.cpp" />
     <ClCompile Include="screen\SplashScreen.cpp" />
+    <ClCompile Include="screen\TwoPlayerDeathScreen.cpp" />
     <ClCompile Include="util\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="screen\menu\PlayerCountScreen.h" />
+    <ClInclude Include="screen\menu\MainScreen.h" />
+    <ClInclude Include="screen\MenuScreen.h" />
     <ClInclude Include="screen\GameScreen.h" />
     <ClInclude Include="screen\DeathScreen.h" />
     <ClInclude Include="screen\PauseScreen.h" />
     <ClInclude Include="screen\Screen.h" />
     <ClInclude Include="screen\SplashScreen.h" />
+    <ClInclude Include="screen\TwoPlayerDeathScreen.h" />
+    <ClInclude Include="ui\Callback.h" />
+    <ClInclude Include="ui\UIButton.h" />
     <ClInclude Include="util\Constants.h" />
     <ClInclude Include="renderable\Food.h" />
     <ClInclude Include="Game.h" />

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../Game.h"
 #include <string>
+#include "../util/Logging.h"
 
 DeathScreen::~DeathScreen()
 {
@@ -14,30 +15,48 @@ void DeathScreen::setup() {
 	scoreText.setString("Score: ");
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setCharacterSize(50);
-	scoreText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2) - (scoreText.getGlobalBounds().width / 2), 200);
+
+	resetButton = UIButton(this->screen, (Game::getInstance()->SCREEN_WIDTH / 2) - 150, 400, 300, 100, "Play again", 30, "./resources/arial.ttf");
+	
+	callback = std::bind(&DeathScreen::reset, this);
+	resetButton.bind(callback);
 }
 
 void DeathScreen::setScore(int score) {
 	this->score = score;
 	scoreText.setString("Score: " + std::to_string(score));
+
+	sf::FloatRect textRect = scoreText.getLocalBounds();
+	scoreText.setOrigin((textRect.left + textRect.width) / 2.0f, 0);
+	scoreText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2), 200);
 }
 
 void DeathScreen::loop() {
 	this->processEvents();
 
-	sf->clear(sf::Color::Black);
+	screen->clear(sf::Color::Black);
 
-	sf->draw(scoreText);
+	screen->draw(scoreText);
+	resetButton.display();
 
-	sf->display();
+	screen->display();
 }
 
 void DeathScreen::processEvents() {
 	sf::Event currEvent;
 
-	while (sf->pollEvent(currEvent)) {
+	while (screen->pollEvent(currEvent)) {
 		if (currEvent.type == sf::Event::Closed) {
 			Game::getInstance()->exit();
 		}
+
+		if (currEvent.type == sf::Event::MouseButtonReleased) {
+			resetButton.click(currEvent);
+		}
 	}
+}
+
+void DeathScreen::reset() {
+	Game::getInstance()->reset();
+	Game::getInstance()->switchGameState(Game::ShowingMenu);
 }

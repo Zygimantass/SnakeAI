@@ -22,7 +22,7 @@ void SplashScreen::loop() {
 	sf->clear(sf::Color::Black);
 
 	if (!((int) splashText.getFillColor().a > 1)) {
-		Game::getInstance()->switchGameState(Game::Playing);
+		Game::getInstance()->switchGameState(Game::ShowingMenu);
 		return;
 	}
 

@@ -3,23 +3,27 @@
 #include <SFML/Graphics.hpp>
 #include "../ui/UIButton.h"
 
-class DeathScreen : public Screen
+class TwoPlayerDeathScreen : public Screen
 {
 public:
-	DeathScreen(sf::RenderWindow *sf) : Screen(sf) {
+	TwoPlayerDeathScreen(sf::RenderWindow *sf) : Screen(sf) {
 		this->screen = sf;
 		this->setup();
-	};
-	~DeathScreen();
+	}
+	~TwoPlayerDeathScreen();
 
-	void setScore(int score);
+	void setScore(int scoreOne, int scoreTwo, int victoriousPlayerIndex);
 
 	void loop() override;
 	void processEvents();
 	void setup();
 private:
 	sf::RenderWindow *screen;
-	sf::Text scoreText;
+	
+	sf::Text scoreOneText;
+	sf::Text scoreTwoText;
+	sf::Text victoryText;
+
 	sf::Font font;
 
 	void reset();
@@ -28,6 +32,8 @@ private:
 
 	std::function<void(void)> callback;
 
-	int score;
+	int scoreOne;
+	int scoreTwo;
+	int victoriousPlayerIndex;
 };
 

@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "ui/Callback.h"
+
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -45,12 +47,11 @@ bool Game::init() {
 
 void Game::setup() {
 	this->splashScreen = new SplashScreen(&this->_window);
+	this->menuScreen = new MenuScreen(&this->_window);
 	this->pauseScreen = new PauseScreen(&this->_window);
 	this->deathScreen = new DeathScreen(&this->_window);
+	this->twoPlayerDeathScreen = new TwoPlayerDeathScreen(&this->_window);
 	this->gameScreen = new GameScreen(&this->_window);
-
-	this->snake = new Snake(&_window);
-	foods.push_back(new Food(&_window, 128, 128));
 }
 
 void Game::start() {
@@ -63,15 +64,35 @@ void Game::start() {
 	while (!isExiting() && _window.isOpen()) {
 		if (_gameState == ShowingSplash)
 			splashScreen->loop();
+		if (_gameState == ShowingMenu)
+			menuScreen->loop();
 		if (_gameState == Playing)
 			gameScreen->loop();
 		if (_gameState == Paused)
 			pauseScreen->loop();
 		if (_gameState == GameOver)
 			deathScreen->loop();
+		if (_gameState == TwoPlayerGameOver)
+			twoPlayerDeathScreen->loop();
 	}
 
 	_window.close();
+}
+
+void Game::reset() {
+	delete this->snake;
+	this->snake = new Snake(&_window, 0);
+	
+	if (this->playerCount > 1) {
+		this->secondSnake = new Snake(&_window, 1);
+	}
+	
+	std::ostringstream aaa = snake->printBody();
+	std::cout << aaa.str() << std::endl;
+
+	foods.clear();
+
+	addFood(this->playerCount);
 }
 
 // exiting
@@ -93,10 +114,8 @@ Snake* Game::getSnake() {
 	return this->snake;
 }
 
-// clock
-
-sf::Clock Game::getRenderClock() {
-	return this->renderClock;
+Snake* Game::getSecondSnake() {
+	return this->secondSnake;
 }
 
 // game state mgmt
@@ -104,10 +123,24 @@ sf::Clock Game::getRenderClock() {
 void Game::switchGameState(GameState state) {
 	switch (state) {
 	case ShowingSplash:
-		
 		break;
 	case GameOver:
 		deathScreen->setScore(snake->getScore());
+		break;
+	case TwoPlayerGameOver:
+		int victoriousPlayer = -1;
+
+		if (snake->died() && secondSnake->died()) {
+			victoriousPlayer = 0;
+		}
+		else if (!snake->died() && secondSnake->died()) {
+			victoriousPlayer = 1;
+		}
+		else if (snake->died() && !secondSnake->died()) {
+			victoriousPlayer = 2;
+		}
+
+		twoPlayerDeathScreen->setScore(snake->getScore(), secondSnake->getScore(), victoriousPlayer);
 		break;
 	}
 
@@ -139,12 +172,20 @@ void Game::addFood(int cnt) {
 			int maxX = (Game::getInstance()->SCREEN_WIDTH - Food::SIZE) / Food::SIZE;
 			int maxY = (Game::getInstance()->SCREEN_HEIGHT - Food::SIZE) / Food::SIZE;
 
-			int x = getRandomInt(0, maxX);
-			int y = getRandomInt(0, maxY);
+			int x = Utils::getRandomInt(0, maxX);
+			int y = Utils::getRandomInt(0, maxY);
 			
 			foodLoc = sf::Vector2f((float) x * 16, (float) y * 16);
 
-			foodPosGood = !snake->collides(foodLoc);
+			if (this->playerCount == 1) {
+				foodPosGood = !snake->collides(foodLoc);
+			}
+			else if (this->playerCount == 2) {
+				foodPosGood = !snake->collides(foodLoc) && !secondSnake->collides(foodLoc);
+			}
+			else {
+				foodPosGood = false;
+			}
 		}
 		
 		foods.push_back(new Food(&_window, (int) foodLoc.x, (int) foodLoc.y));

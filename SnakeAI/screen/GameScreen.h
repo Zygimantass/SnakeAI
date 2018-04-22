@@ -17,5 +17,8 @@ public:
 private:
 	void display();
 	void update(float dt);
+	
+	sf::Clock renderClock;
+
 };
 
