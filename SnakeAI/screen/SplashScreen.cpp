@@ -7,7 +7,7 @@ SplashScreen::~SplashScreen()
 }
 
 void SplashScreen::setup() {
-	if (!font.loadFromFile("./resources/arial.ttf")) return;
+	if (!font.loadFromFile("resources/arial.ttf")) return;
 
 	splashText.setFont(font);
 	splashText.setString("Snake AI");

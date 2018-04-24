@@ -17,9 +17,7 @@ void DeathScreen::setup() {
 	scoreText.setCharacterSize(50);
 
 	resetButton = UIButton(this->screen, (Game::getInstance()->SCREEN_WIDTH / 2) - 150, 400, 300, 100, L"Žaisti dar kartą", 30, "./resources/arial.ttf");
-	
-	callback = std::bind(&DeathScreen::reset, this);
-	resetButton.bind(callback);
+	resetButton.bind(std::bind(&DeathScreen::reset, this));
 }
 
 void DeathScreen::setScore(int score) {
@@ -28,7 +26,7 @@ void DeathScreen::setScore(int score) {
 
 	sf::FloatRect textRect = scoreText.getLocalBounds();
 	scoreText.setOrigin((textRect.left + textRect.width) / 2.0f, 0);
-	scoreText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2), 200);
+	scoreText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2.0f), 200);
 }
 
 void DeathScreen::loop() {

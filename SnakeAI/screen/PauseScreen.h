@@ -1,6 +1,7 @@
 #pragma once
 #include "Screen.h"
 #include <SFML/Graphics.hpp>
+#include "../ui/UIButton.h"
 
 class PauseScreen : public Screen
 {
@@ -14,5 +15,12 @@ public:
 	void loop() override;
 	void processEvents();
 	void setup();
+private:
+	void reset();
+
+	sf::Font font;
+	sf::Text pauseText;
+
+	UIButton resetButton;
 };
 

@@ -4,6 +4,7 @@
 #include "../util/Logging.h"
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include "../models/Direction.h"
 
 Snake::~Snake()
 {
@@ -19,16 +20,18 @@ void Snake::display() {
 	this->sf->draw(body[0]);
 }
 
+
+
 void Snake::update(float dt)
 {
 	if (sf::Keyboard::isKeyPressed(this->currentScheme[0]) && this->local) {
-		this->switchDirection(sf::Vector2<int>(-1, 0));
+		this->switchDirection(Direction::LEFT);
 	} else if (sf::Keyboard::isKeyPressed(this->currentScheme[1]) && this->local) {
-		this->switchDirection(sf::Vector2<int>(1, 0));
+		this->switchDirection(Direction::RIGHT);
 	} else if (sf::Keyboard::isKeyPressed(this->currentScheme[2]) && this->local) {
-		this->switchDirection(sf::Vector2<int>(0, -1));
+		this->switchDirection(Direction::UP);
 	} else if (sf::Keyboard::isKeyPressed(this->currentScheme[3]) && this->local) {
-		this->switchDirection(sf::Vector2<int>(0, 1));
+		this->switchDirection(Direction::DOWN);
 	}
 
 	if (secondsSinceLastMove > (1.0 / speed)) {
@@ -53,22 +56,24 @@ void Snake::update(float dt)
 
 // movement
 
-void Snake::move(sf::Vector2<int> direction) {
+void Snake::move(Direction::Direction direction) {
 	snakeDirections.push_front(direction);
 	snakeDirections.pop_back();
 
-	std::list<sf::Vector2<int>>::iterator i = snakeDirections.begin();
+	std::list<Direction::Direction>::iterator i = snakeDirections.begin();
 
 	int index = 0;
 
 	while (i != snakeDirections.end() && index < snake_length) {
-		body[index].move((float) (16 * (*i).x), (float) (16 * (*i).y));
+		sf::Vector2f dir = getVectorDir(*i);
+
+		body[index].move((float) (16 * dir.x), (float) (16 * dir.y));
 		index++;
 		i++;
 	}
 }
 
-void Snake::switchDirection(sf::Vector2<int> dir) {
+void Snake::switchDirection(Direction::Direction dir) {
 	this->lastDir = dir;
 }
 

@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include "ui/Callback.h"
-
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -9,10 +7,14 @@
 #include <vector>
 #include <random>
 
+#include "models/Point.cpp"
+
 #include "renderable/Renderable.h"
 #include "renderable/Snake.h"
 #include "renderable/Food.h"
 #include "util/Logging.h"
+
+#include "renderable/ai/BFSSnake.h"
 
 Game* Game::m_pInstance = NULL;
 
@@ -81,10 +83,22 @@ void Game::start() {
 
 void Game::reset() {
 	delete this->snake;
-	this->snake = new Snake(&_window, 0);
-	
-	if (this->playerCount > 1) {
-		this->secondSnake = new Snake(&_window, 1);
+	//this->snake = new Snake(&_window, 0);
+
+	if (aiPlayerCount == 0) {
+		this->snake = new Snake(&_window, 0);
+
+		if (this->playerCount > 1) {
+			this->secondSnake = new Snake(&_window, 1);
+		}
+	}
+	else if (aiPlayerCount == 1) {
+		this->snake = new Snake(&_window, 0);
+		this->secondSnake = new BFSSnake(&_window, 1);
+	}
+	else if (aiPlayerCount == 2) {
+		this->snake = new BFSSnake(&_window, 0);
+		this->secondSnake = new BFSSnake(&_window, 1);
 	}
 	
 	std::ostringstream aaa = snake->printBody();
@@ -190,4 +204,30 @@ void Game::addFood(int cnt) {
 		
 		foods.push_back(new Food(&_window, (int) foodLoc.x, (int) foodLoc.y));
 	}
+}
+
+// safe path
+
+bool Game::isSafe(Point point) {
+	bool safe = true;
+
+	if (snake->collides((sf::Vector2f) point.pos)) {
+		safe = false;
+	}
+
+	if (playerCount == 2) {
+		if (secondSnake->collides((sf::Vector2f) point.pos)) {
+			safe = false;
+		}
+	}
+
+	if (point.pos.x >= Constants::SCREEN_WIDTH || point.pos.y >= Constants::SCREEN_HEIGHT) {
+		safe = false;
+	}
+
+	if (!(point.pos.x >= 0) || !(point.pos.y >= 0)) {
+		safe = false;
+	}
+
+	return safe;
 }

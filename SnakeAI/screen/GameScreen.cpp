@@ -29,9 +29,9 @@ void GameScreen::loop() {
 	processEvents();
 
 	sf->clear(sf::Color::Black);
-
-	update(dt);
+	
 	display();
+	update(dt);
 
 	if (Game::getInstance()->getPlayerCount() == 2) {
 		if (Game::getInstance()->getSecondSnake()->died() || Game::getInstance()->getSnake()->died()) Game::getInstance()->switchGameState(Game::GameState::TwoPlayerGameOver);

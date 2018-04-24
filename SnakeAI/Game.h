@@ -10,6 +10,8 @@
 #include "renderable/Food.h"
 #include "renderable/Snake.h"
 
+#include "models/Point.cpp"
+
 #include "screen/SplashScreen.h"
 #include "screen/PauseScreen.h"
 #include "screen/DeathScreen.h"
@@ -22,7 +24,7 @@ class Game
 public:
 	// consts
 
-	static const int FRAMES_PER_SECOND = 60;
+	static const int FRAMES_PER_SECOND = 3000;
 	static const int SCREEN_WIDTH = Constants::SCREEN_WIDTH;
 	static const int SCREEN_HEIGHT = Constants::SCREEN_HEIGHT;
 
@@ -42,6 +44,13 @@ public:
 
 	int getPlayerCount() {
 		return this->playerCount;
+	}
+	void setAIPlayerCount(int cnt) {
+		this->aiPlayerCount = cnt;
+	}
+
+	int getAIPlayerCount() {
+		return this->aiPlayerCount;
 	}
 
 	// food
@@ -74,6 +83,10 @@ public:
 	Snake* getSnake();
 	Snake* getSecondSnake();
 
+	// safe path
+
+	bool isSafe(Point point);
+
 	// clock
 
 	sf::Clock getRenderClock();
@@ -100,6 +113,7 @@ private:
 	void setup();
 	
 	int playerCount = 0;
+	int aiPlayerCount = 0;
 
 	// vars
 

@@ -12,7 +12,7 @@ void MainScreen::setup() {
 
 	sf::FloatRect textRect = titleText.getLocalBounds();
 	titleText.setOrigin((textRect.left + textRect.width) / 2.0f, 0);
-	titleText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2), 150);
+	titleText.setPosition((Game::getInstance()->SCREEN_WIDTH / 2.0f), 150);
 	
 	this->playButton = UIButton(this->sf, (Game::getInstance()->SCREEN_WIDTH / 2) - 100, 325, 200, 50, L"Žaisti", 20, "./resources/arial.ttf");
 	this->playButton.bind(std::bind(&MainScreen::play, this));

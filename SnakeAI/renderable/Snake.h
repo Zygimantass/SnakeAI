@@ -6,6 +6,7 @@
 #include "../util/Constants.h"
 #include "../util/Utils.h"
 #include "../util/Logging.h"
+#include "../models/Direction.h"
 #include <sstream>
 
 class Snake: public Renderable
@@ -39,17 +40,17 @@ public:
 
 		this->x = gridX * Snake::SIZE;
 		this->y = gridY * Snake::SIZE;
-		//this->x = 0;
-		//this->y = 0;
 		
 		this->width = Snake::SIZE;
 		this->height = Snake::SIZE;
 
-		this->lastDir = sf::Vector2<int>(0, 1);
+		this->lastDir = Direction::Direction::DOWN;
 
-		snakeDirections.push_back(sf::Vector2<int>(0, 1));
+		snakeDirections.push_back(Direction::Direction::DOWN);
 		body.push_back(Utils::getRectangleAt(sf::Vector2f((float) this->x, (float) this->y), sf::Vector2f(16, 16), this->headColor));
 		
+		logger::printCoords(body.at(0).getPosition());
+
 		this->playerIndex = playerIndex;
 		this->currentScheme = this->controlSchemes[playerIndex];
 	};
@@ -63,13 +64,24 @@ public:
 	}
 	std::ostringstream printBody();
 
+	// body
+	std::vector<sf::RectangleShape> getBody() {
+		return this->body;
+	}
+
+	Direction::Direction getLastDir() {
+		return lastDir;
+	}
+
+
 	// display, update
 	void display() override;
 	void update(float dt) override;
 	
 	// movement
-	void switchDirection(sf::Vector2<int> dir);
-	
+	void switchDirection(Direction::Direction dir);
+	virtual void move(Direction::Direction direction);
+
 	// death check
 	bool died();
 
@@ -82,8 +94,7 @@ public:
 	void addScore();
 	void addScore(int score);
 
-private:
-	void move(sf::Vector2<int> direction);
+protected:
 	int ateFood();
 	sf::Color headColor;
 	sf::Color bodyColor;
@@ -92,9 +103,9 @@ private:
 
 	int speed;
 	int snake_length;
-	std::list<sf::Vector2<int>> snakeDirections;
+	std::list<Direction::Direction> snakeDirections;
 	std::vector<sf::RectangleShape> body;
-	sf::Vector2<int> lastDir;
+	Direction::Direction lastDir;
 
 	int score = 0;
 

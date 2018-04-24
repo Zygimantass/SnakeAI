@@ -85,6 +85,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="models\Direction.cpp" />
+    <ClCompile Include="models\Point.cpp" />
+    <ClCompile Include="renderable\ai\PathSolver.cpp" />
+    <ClCompile Include="renderable\ai\BFSSnake.cpp" />
+    <ClCompile Include="renderable\ai\AISnake.cpp" />
     <ClCompile Include="screen\menu\AboutScreen.cpp" />
     <ClCompile Include="screen\menu\PlayerCountScreen.cpp" />
     <ClCompile Include="screen\menu\MainScreen.cpp" />
@@ -103,6 +108,10 @@
     <ClCompile Include="util\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="models\Direction.h" />
+    <ClInclude Include="renderable\ai\PathSolver.h" />
+    <ClInclude Include="renderable\ai\BFSSnake.h" />
+    <ClInclude Include="renderable\ai\AISnake.h" />
     <ClInclude Include="screen\menu\AboutScreen.h" />
     <ClInclude Include="screen\menu\PlayerCountScreen.h" />
     <ClInclude Include="screen\menu\MainScreen.h" />
@@ -113,7 +122,6 @@
     <ClInclude Include="screen\Screen.h" />
     <ClInclude Include="screen\SplashScreen.h" />
     <ClInclude Include="screen\TwoPlayerDeathScreen.h" />
-    <ClInclude Include="ui\Callback.h" />
     <ClInclude Include="ui\UIButton.h" />
     <ClInclude Include="util\Constants.h" />
     <ClInclude Include="renderable\Food.h" />

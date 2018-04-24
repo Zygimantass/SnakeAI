@@ -26,8 +26,6 @@ private:
 
 	UIButton resetButton;
 
-	std::function<void(void)> callback;
-
 	int score;
 };
 

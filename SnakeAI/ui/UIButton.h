@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <functional>
-#include "Callback.h"
 #include "../util/Logging.h"
 #include <memory>
 
@@ -29,6 +28,7 @@ public:
 
 
 		if (!(this->font)->loadFromFile(fontName)) {
+			logger::print("load failed");
 			return;
 		}
 

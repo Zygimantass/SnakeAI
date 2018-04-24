@@ -18,9 +18,13 @@ public:
 private:
 	void onePlayer();
 	void twoPlayer();
+	void playerVsAI();
+	void AIVsAI();
 
 	UIButton onePlayerButton;
 	UIButton twoPlayerButton;
+	UIButton playerVsAIButton;
+	UIButton AIVsAIButton;
 
 	sf::Font font;
 	sf::Text playerCountText;
