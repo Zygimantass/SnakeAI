@@ -6,6 +6,8 @@ AISnake::~AISnake()
 }
 
 void AISnake::update(float dt) {
+	// moving every 1.0 / speed seconds, checking for eaten food and moving based on this->next_direction()
+
 	if (secondsSinceLastMove > (1.0 / speed)) {
 
 		int eatenFood = this->ateFood();

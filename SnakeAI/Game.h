@@ -38,6 +38,8 @@ public:
 	void reset();
 	void start();
 
+	// ai and normal player counts
+
 	void setPlayerCount(int cnt) {
 		this->playerCount = cnt;
 	}
@@ -68,6 +70,8 @@ public:
 	// misc
 
 	sf::Font getFont();
+
+	// state managament
 
 	enum GameState {
 		Uninitialized, ShowingSplash, Paused,
@@ -112,6 +116,8 @@ private:
 	bool isExiting();
 	void setup();
 	
+	// playercount
+
 	int playerCount = 0;
 	int aiPlayerCount = 0;
 
@@ -121,6 +127,8 @@ private:
 	GameState _gameState = Uninitialized;
 
 	sf::Font font;
+
+	// snakes
 
 	Snake* snake;
 	Snake* secondSnake;

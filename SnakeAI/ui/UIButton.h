@@ -5,16 +5,20 @@
 #include "../util/Logging.h"
 #include <memory>
 
+// class for Button
 class UIButton
 {
 public:
-
+	// ctor
 	UIButton() {
 	}
 	
+	//ctor takes window, position, size, text, fontSize, font
 	UIButton(sf::RenderWindow *sf, int x, int y, int w, int h, std::wstring text, int size, std::string font) {
 		this->sf = sf;
 		this->fontName = font;
+
+		//shared pointer for font, because of weird bug
 		this->font = std::make_shared<sf::Font>();
 
 		this->pos.x = (float) x;
@@ -26,7 +30,7 @@ public:
 		buttonText.setString(text);
 		buttonText.setCharacterSize(size);
 
-
+		// loading font
 		if (!(this->font)->loadFromFile(fontName)) {
 			logger::print("load failed");
 			return;
@@ -39,6 +43,7 @@ public:
 	~UIButton() {
 	};
 
+	// checking for mouse in button
 	bool inBounds(sf::Vector2f pos) {
 		return buttonRect.getGlobalBounds().contains(pos);
 	};
@@ -48,6 +53,7 @@ public:
 		return inBounds(pos);
 	};
 
+	// setup of button
 	void setup() {
 		buttonRect.setPosition(this->pos);
 		buttonRect.setFillColor(sf::Color::White);
@@ -60,33 +66,33 @@ public:
 		buttonText.setOrigin((textRect.left + textRect.width) / 2.0f, (textRect.top + textRect.height) / 2.0f);
 		buttonText.setPosition(this->pos.x + (this->size.x / 2), this->pos.y + (this->size.y / 2));
 		
-		logger::printCoords(sf::Vector2f(this->pos.x + (this->size.x / 2), this->pos.y + (this->size.y / 2)));
-
 		this->initialized = true;
 	};
 
+	// checking for button click
 	void click(sf::Event currEvent) {
 		if (currEvent.type == sf::Event::MouseButtonReleased) {
 			if (currEvent.mouseButton.button == sf::Mouse::Left) {
 				sf::Vector2f clickLoc((float) currEvent.mouseButton.x, (float) currEvent.mouseButton.y);
 
-				logger::print("clicked at: ");
-				logger::printCoords(clickLoc);
-
 				if (this->buttonRect.getGlobalBounds().contains(clickLoc)) {
+					// calling back
+
 					action();
 				}
 			}
 		}
 	}
 
+	// displaying button
 	void display() {
 		if (!initialized) return;
 
 		sf->draw(buttonRect);
 		sf->draw(buttonText);
 	};
-	
+
+	// binding callback
 	void bind(std::function<void(void)> action) {
 		this->action = action;
 	}

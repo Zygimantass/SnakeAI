@@ -4,6 +4,7 @@ Food::~Food()
 {
 }
 
+// displaying our food rect
 void Food::display() {
 	sf::RectangleShape shape;
 

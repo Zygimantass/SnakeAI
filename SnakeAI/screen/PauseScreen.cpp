@@ -6,6 +6,7 @@ PauseScreen::~PauseScreen()
 {
 }
 
+// setting up screen
 void PauseScreen::setup() {
 	if (!font.loadFromFile("resources/arial.ttf")) {
 		logger::print("failed");
@@ -22,6 +23,7 @@ void PauseScreen::setup() {
 	resetButton.bind(std::bind(&PauseScreen::reset, this));
 }
 
+// main loop
 void PauseScreen::loop() {
 	this->processEvents();
 	sf->clear(sf::Color::Black);
@@ -32,6 +34,7 @@ void PauseScreen::loop() {
 	sf->display();
 }
 
+// event processing
 void PauseScreen::processEvents() {
 	sf::Event currEvent;
 
@@ -50,6 +53,7 @@ void PauseScreen::processEvents() {
 	}
 }
 
+// resetting game
 void PauseScreen::reset() {
 	Game::getInstance()->reset();
 	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::Main);

@@ -1,9 +1,11 @@
 #include "MenuScreen.h"
 
+// setup for screen
 void MenuScreen::setup() {
 	this->currentState = Main;
 }
 
+// main loop
 void MenuScreen::loop() {
 	switch (this->currentState) {
 	case Main:
@@ -17,6 +19,7 @@ void MenuScreen::loop() {
 	}
 }
 
+// switching menu state
 void MenuScreen::switchMenuState(MenuScreen::MenuState state) {
 	this->currentState = state;
 }

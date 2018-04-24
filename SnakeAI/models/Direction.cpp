@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 namespace Direction {
+
+	// converts enum to vector2f, takes Enum, returns sf::Vector2f
 	sf::Vector2f getVectorDir(Direction dir) {
 		switch (dir) {
 		case Direction::LEFT:
@@ -19,6 +21,7 @@ namespace Direction {
 		}
 	}
 	
+	// returns the opposite direction of argument dir
 	Direction opposite(Direction dir) {
 		switch (dir) {
 		case Direction::LEFT:

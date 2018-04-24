@@ -1,4 +1,6 @@
 #pragma once
+
+// header guard
 #ifndef POINT_CPP
 #define POINT_CPP
 
@@ -7,20 +9,28 @@
 #include "Direction.h"
 #include "../util/Logging.h"
 
+// struct for a Point for easier use
 struct Point {
+
+	// default ctor
 	Point() {
 
 	}
 
+	// ctor, that takes Vector2<int> for position
 	Point(sf::Vector2<int> pos) {
 		this->pos = pos;
 	}
 
+	// Point position
 	sf::Vector2<int> pos;
 
+	// ctor, that takes x and y for position
 	Point(int x, int y) {
 		pos = sf::Vector2<int>(x, y);
 	}
+	
+	// overloading operators
 
 	bool operator==(const Point &other) const {
 		return (pos.x == other.pos.x && pos.y == other.pos.y);
@@ -29,6 +39,8 @@ struct Point {
 	bool operator!=(const Point &other) const {
 		return !(pos.x == other.pos.x && pos.y == other.pos.y);
 	}
+
+	// get direction to other point
 
 	Direction::Direction getDirectionTo(Point other) {
 		if (pos.x == other.pos.x) {
@@ -55,6 +67,8 @@ struct Point {
 		return Direction::NONE;
 	}
 
+	// takes argument dir and returns Point that's adjacent to this point
+
 	Point adjacentPoint(Direction::Direction dir) {
 		switch (dir) {
 		case Direction::LEFT:
@@ -69,6 +83,8 @@ struct Point {
 			return Point(pos.x, pos.y);
 		}
 	}
+
+	// returns a vector of adjacent points
 
 	std::vector<Point> adjacentPoints() {
 		std::vector<Point> adjPoints;

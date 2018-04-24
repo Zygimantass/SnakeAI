@@ -1,22 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+// base class for Screen
 class Screen {
 public:
 	Screen() {};
 	Screen(sf::RenderWindow *sf);
 	~Screen();
 
+	// meant to be overridden
 	virtual void loop();
 	virtual void processEvents();
-	
-	void enable();
-	void disable();
-	void toggle();
-	bool isActive();
 protected:
 	sf::RenderWindow *sf;
-
-	bool active = false;
 };
 

@@ -47,6 +47,7 @@ bool Game::init() {
 	return true;
 }
 
+// setting up the game
 void Game::setup() {
 	this->splashScreen = new SplashScreen(&this->_window);
 	this->menuScreen = new MenuScreen(&this->_window);
@@ -61,7 +62,7 @@ void Game::start() {
 
 	switchGameState(ShowingSplash);
 
-	logger::print("entering game loop");
+	// switching screens based on state
 
 	while (!isExiting() && _window.isOpen()) {
 		if (_gameState == ShowingSplash)
@@ -81,9 +82,12 @@ void Game::start() {
 	_window.close();
 }
 
+// resetting the game
+
 void Game::reset() {
 	delete this->snake;
-	//this->snake = new Snake(&_window, 0);
+
+	// setting snakes based on aiPlayerCount and playerCount
 
 	if (aiPlayerCount == 0) {
 		this->snake = new Snake(&_window, 0);
@@ -101,11 +105,7 @@ void Game::reset() {
 		this->secondSnake = new BFSSnake(&_window, 1);
 	}
 	
-	std::ostringstream aaa = snake->printBody();
-	std::cout << aaa.str() << std::endl;
-
 	foods.clear();
-
 	addFood(this->playerCount);
 }
 
@@ -169,6 +169,8 @@ int Game::getRandomInt(int min, int max) {
 	return dist(gen);
 }
 
+// getting font
+
 sf::Font Game::getFont() {
 	return this->font;
 }
@@ -181,6 +183,8 @@ void Game::addFood(int cnt) {
 		bool foodPosGood = false;
 
 		sf::Vector2f foodLoc;
+
+		// checks for valid food spots
 
 		while (!foodPosGood) {
 			int maxX = (Game::getInstance()->SCREEN_WIDTH - Food::SIZE) / Food::SIZE;
@@ -206,7 +210,7 @@ void Game::addFood(int cnt) {
 	}
 }
 
-// safe path
+// safe path, takes point returns bool based on is it safe
 
 bool Game::isSafe(Point point) {
 	bool safe = true;

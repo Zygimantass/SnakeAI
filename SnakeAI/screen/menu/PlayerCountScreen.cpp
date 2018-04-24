@@ -4,6 +4,8 @@
 void PlayerCountScreen::setup() {
 	if (!font.loadFromFile("./resources/arial.ttf")) return;
 
+	// setting up and centering text
+
 	playerCountText.setString(L"Pasirinkite žaidėjų kiekį:");
 	playerCountText.setCharacterSize(50);
 	playerCountText.setFillColor(sf::Color::White);
@@ -12,6 +14,8 @@ void PlayerCountScreen::setup() {
 	sf::FloatRect textRect = playerCountText.getLocalBounds();
 	playerCountText.setOrigin((textRect.left + textRect.width) / 2.0f, 0.0);
 	playerCountText.setPosition((float) (Game::getInstance()->SCREEN_WIDTH / 2), (float) 150);
+
+	// creating buttons and binding them to their functions
 
 	this->onePlayerButton = UIButton(this->sf, (Game::getInstance()->SCREEN_WIDTH / 2) - 225, 250, 200, 50, L"Vienas žaidėjas", 20, "./resources/arial.ttf");
 	this->onePlayerButton.bind(std::bind(&PlayerCountScreen::onePlayer, this));
@@ -28,6 +32,7 @@ void PlayerCountScreen::setup() {
 
 void PlayerCountScreen::processEvents() {
 	sf::Event currEvent;
+	// polling for exits or button clicks
 
 	while (sf->pollEvent(currEvent)) {
 		if (currEvent.type == sf::Event::Closed) {
@@ -42,6 +47,8 @@ void PlayerCountScreen::processEvents() {
 		}
 	}
 }
+
+// setting player count functions
 
 void PlayerCountScreen::playerVsAI() {
 	Game::getInstance()->setPlayerCount(2);
@@ -70,6 +77,8 @@ void PlayerCountScreen::twoPlayer() {
 	Game::getInstance()->reset();
 	Game::getInstance()->switchGameState(Game::Playing);
 }
+
+// main loop
 
 void PlayerCountScreen::loop() {
 	processEvents();

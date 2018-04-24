@@ -2,6 +2,7 @@
 #include "../Game.h"
 #include "../util/Constants.h"
 
+// setting up screen
 void TwoPlayerDeathScreen::setup() {
 	if (!font.loadFromFile("./resources/arial.ttf")) return;
 
@@ -21,15 +22,16 @@ void TwoPlayerDeathScreen::setup() {
 	victoryText.setCharacterSize(55);
 
 	resetButton = UIButton(this->screen, (Game::getInstance()->SCREEN_WIDTH / 2) - 150, 400, 300, 100, L"Žaisti iš naujo", 30, "./resources/arial.ttf");
-
-	callback = std::bind(&TwoPlayerDeathScreen::reset, this);
-	resetButton.bind(callback);
+	resetButton.bind(std::bind(&TwoPlayerDeathScreen::reset, this));
 }
 
+// setting the scores
 void TwoPlayerDeathScreen::setScore(int scoreOne, int scoreTwo, int victoriousPlayerIndex) {
 	this->scoreOne = scoreOne;
 	this->scoreTwo = scoreTwo;
 	this->victoriousPlayerIndex = victoriousPlayerIndex;
+
+	// setting up scores and centering texts
 
 	scoreOneText.setString(L"Pirmo žaidėjo taškai: " + std::to_wstring(scoreOne));
 	scoreTwoText.setString(L"Antro žaidėjo taškai: " + std::to_wstring(scoreTwo));
@@ -41,6 +43,8 @@ void TwoPlayerDeathScreen::setScore(int scoreOne, int scoreTwo, int victoriousPl
 	sf::FloatRect textTwoRect = scoreTwoText.getLocalBounds();
 	scoreTwoText.setOrigin((textTwoRect.left + textTwoRect.width) / 2.0f, 0);
 	scoreTwoText.setPosition((Constants::SCREEN_WIDTH / 2), 250);
+
+	// setting the victorious people text and centering it
 
 	if (this->victoriousPlayerIndex == 0) {
 		victoryText.setString(L"Lygiosios!");
@@ -57,6 +61,7 @@ void TwoPlayerDeathScreen::setScore(int scoreOne, int scoreTwo, int victoriousPl
 	victoryText.setPosition((Constants::SCREEN_WIDTH / 2), 100);
 }
 
+// main loop
 void TwoPlayerDeathScreen::loop() {
 	this->processEvents();
 
@@ -70,6 +75,7 @@ void TwoPlayerDeathScreen::loop() {
 	screen->display();
 }
 
+// event processing
 void TwoPlayerDeathScreen::processEvents() {
 	sf::Event currEvent;
 
@@ -84,6 +90,7 @@ void TwoPlayerDeathScreen::processEvents() {
 	}
 }
 
+// resetting game
 void TwoPlayerDeathScreen::reset() {
 	Game::getInstance()->reset();
 	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::Main);

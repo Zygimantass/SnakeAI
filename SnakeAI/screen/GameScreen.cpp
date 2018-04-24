@@ -6,6 +6,7 @@ GameScreen::~GameScreen()
 {
 }
 
+// setting up screen
 void GameScreen::setup() {
 	if (!font.loadFromFile("./resources/arial.ttf")) return;
 
@@ -20,19 +21,23 @@ void GameScreen::setup() {
 	scoreTwoText.setCharacterSize(20);
 }
 
+// main loop
 void GameScreen::loop() {
+	// clock since last frame
 	sf::Time elapsedTime = renderClock.restart();
 	float dt = elapsedTime.asSeconds();
 	
+	// processing events (exit and P)
 	this->processEvents();
 
-	processEvents();
-
+	// clearing the screen
 	sf->clear(sf::Color::Black);
 	
+	// displaying and updating the screen
 	display();
 	update(dt);
 
+	// checking for snake death
 	if (Game::getInstance()->getPlayerCount() == 2) {
 		if (Game::getInstance()->getSecondSnake()->died() || Game::getInstance()->getSnake()->died()) Game::getInstance()->switchGameState(Game::GameState::TwoPlayerGameOver);
 	}
@@ -40,9 +45,11 @@ void GameScreen::loop() {
 		if (Game::getInstance()->getSnake()->died()) Game::getInstance()->switchGameState(Game::GameState::GameOver);
 	}
 
+	// displaying everything
 	sf->display();
 }
 
+// HUD for score
 void GameScreen::displayScore() {
 	scoreOneText.setPosition(7, 7);
 	scoreOneText.setString(L"1 taškai: " + std::to_wstring(Game::getInstance()->getSnake()->getScore()));
@@ -59,6 +66,7 @@ void GameScreen::displayScore() {
 	}
 }
 
+// processing events
 void GameScreen::processEvents() {
 	sf::Event currEvent;
 
@@ -73,11 +81,18 @@ void GameScreen::processEvents() {
 	}
 }
 
+// displaying everything
 void GameScreen::display() {
+	// displaying snake
 	Game::getInstance()->getSnake()->display();
+	
+	// displaying HUD
 	displayScore();
+
+	// displaying 2nd snake
 	if (Game::getInstance()->getPlayerCount() == 2) Game::getInstance()->getSecondSnake()->display();
 
+	// displaying food
 	for (auto it = Game::getInstance()->foods.begin(); it != Game::getInstance()->foods.end(); it++) {
 		Renderable* r = *it;
 		r->display();
@@ -85,10 +100,13 @@ void GameScreen::display() {
 }
 
 void GameScreen::update(float dt) {
+	// updating snake
 	Game::getInstance()->getSnake()->update(dt);
 	
+	// updating 2nd snake
 	if (Game::getInstance()->getPlayerCount() == 2) Game::getInstance()->getSecondSnake()->update(dt);
 
+	// updating food
 	for (auto it = Game::getInstance()->foods.begin(); it != Game::getInstance()->foods.end(); it++) {
 		Renderable* r = *it;
 		r->update(dt);

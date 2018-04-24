@@ -2,6 +2,8 @@
 #include "../../Game.h"
 #include "../../util/Logging.h"
 
+
+// setting up main menu, binding functions to buttons, and creating buttons
 void MainScreen::setup() {
 	if (!font.loadFromFile("./resources/arial.ttf")) return;
 
@@ -24,6 +26,7 @@ void MainScreen::setup() {
 	this->exitButton.bind(std::bind(&MainScreen::exit, this));
 }
 
+// main loop
 void MainScreen::loop() {
 	this->processEvents();
 
@@ -36,14 +39,17 @@ void MainScreen::loop() {
 	sf->display();
 }
 
+// exiting
 void MainScreen::exit() {
 	Game::getInstance()->exit();
 }
 
+// playing
 void MainScreen::play() {
 	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::PlayerCount);
 }
 
+// switching to about menu
 void MainScreen::about() {
 	Game::getInstance()->menuScreen->switchMenuState(MenuScreen::About);
 }

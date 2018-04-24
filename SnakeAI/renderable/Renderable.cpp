@@ -8,6 +8,7 @@ Renderable::~Renderable()
 {
 }
 
+// meant to be overriden
 void Renderable::display()
 {
 }
@@ -15,6 +16,7 @@ void Renderable::display()
 void Renderable::update(float dt) {
 }
 
+// size and location
 sf::Vector2f Renderable::getSize() {
 	return sf::Vector2f(this->width, this->height);
 }

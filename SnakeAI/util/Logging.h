@@ -6,6 +6,7 @@
 #include "Logging.h"
 #include "Constants.h"
 
+// logging for debugging
 namespace logger {
 	static const char TAG[] = "SnakeAI";
 

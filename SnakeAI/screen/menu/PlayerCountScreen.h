@@ -3,9 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include "../../ui/UIButton.h"
 
+// Screen for choosing players, inherits screen
 class PlayerCountScreen : public Screen
 {
 public:
+	// ctor, takes renderwindow
 	PlayerCountScreen(sf::RenderWindow *sf) : Screen(sf) {
 		this->sf = sf;
 		this->setup();
@@ -16,6 +18,7 @@ public:
 	void processEvents();
 	void setup();
 private:
+	// functions and their buttons
 	void onePlayer();
 	void twoPlayer();
 	void playerVsAI();
@@ -26,6 +29,7 @@ private:
 	UIButton playerVsAIButton;
 	UIButton AIVsAIButton;
 
+	// player count text and font
 	sf::Font font;
 	sf::Text playerCountText;
 };
